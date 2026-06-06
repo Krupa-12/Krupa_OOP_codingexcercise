@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Digital Restaurant Menu</title>
+
+<meta name="theme-color" content="#222222">
+
+<link rel="icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
+
+<style>
+<meta charset="UTF-8">
+<title>Digital Restaurant Menu</title>
+
+<style>
+
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    margin:0;
+    padding:20px;
+}
+
+h1{
+    text-align:center;
+    color:#333;
+}
+.menu{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+
+.card{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.2);
+    text-align:center;
+}
+
+.card h3{
+    margin:10px 0;
+}
+
+.card p{
+    font-weight:bold;
+    color:green;
+}
+
+button{
+    padding:8px 12px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+}
+
+.add-btn{
+    background:#F0F8FF;
+    color:black;
+}
+
+.checkout-btn{
+    background:#007bff;
+    color:white;
+}
+
+.clear-btn{
+    background:#dc3545;
+    color:white;
+}
+
+.footer{
+    margin-top:30px;
+    text-align:center;
+}
+
+#total{
+    font-size:24px;
+    font-weight:bold;
+    color:green;
+}
+
+#summary{
+    width:400px;
+    height:180px;
+    margin-top:10px;
+    font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🍽  Welcome to Our Restaurant 🍽</h1>
+
+<div class="menu">
+
+<div class="card">
+<h3>Classic Burger</h3>
+<p>₹199</p>
+<button class="add-btn"
+onclick="addItem('Classic Burger',199)">Add to Cart</button>
+</div>
+
+<div class="card">
+<h3>Cheese Pizza</h3>
+<p>₹299</p>
+<button class="add-btn"
+onclick="addItem('Cheese Pizza',299)">Add to Cart</button>
+</div>
+
+<div class="card">
+<h3>Alfredo Pasta</h3>
+<p>₹249</p>
+<button class="add-btn"
+onclick="addItem('Alfredo Pasta',249)">Add to Cart</button>
+</div>
+
+<div class="card">
+<h3>French Fries</h3>
+<p>₹99</p>
+<button class="add-btn"
+onclick="addItem('French Fries',99)">Add to Cart</button>
+</div>
+
+<div class="card">
+<h3>Caesar Salad</h3>
+<p>₹149</p>
+<button class="add-btn"
+onclick="addItem('Caesar Salad',149)">Add to Cart</button>
+</div>
+
+<div class="card">
+<h3>Italian Taco</h3>
+<p>₹129</p>
+<button class="add-btn"
+onclick="addItem('Italian Taco',129)">Add to Cart</button>
+</div>
+
+<div class="card">
+<h3>Salmon Sushi</h3>
+<p>₹399</p>
+<button class="add-btn"
+onclick="addItem('Salmon Sushi',399)">Add to Cart</button>
+</div>
+
+<div class="card">
+<h3>Tomato Soup</h3>
+<p>₹119</p>
+<button class="add-btn"
+onclick="addItem('Tomato Soup',119)">Add to Cart</button>
+</div>
+
+<div class="card">
+<h3>Vanilla Ice Cream</h3>
+<p>₹10</p>
+<button class="add-btn"
+onclick="addItem('Vanilla Ice Cream',10)">Add to Cart</button>
+</div>
+
+<div class="card">
+<h3>Hot Coffee</h3>
+<p>₹79</p>
+<button class="add-btn"
+onclick="addItem('Hot Coffee',79)">Add to Cart</button>
+</div>
+
+</div>
+
+<div class="footer">
+
+<p id="total">Total Bill: ₹0</p>
+
+<h3>Order Summary</h3>
+
+<textarea id="summary" readonly></textarea>
+
+<br><br>
+
+<button class="checkout-btn"
+onclick="checkout()">Generate Bill</button>
+
+<button class="clear-btn"
+onclick="clearOrder()">Clear Order</button>
+
+</div>
+
+<script>
+
+let total = 0;
+let cart = {};
+
+function addItem(name, price){
+
+    total += price;
+
+    if(cart[name]){
+        cart[name].qty++;
+    }
+    else{
+        cart[name] = {
+            qty:1,
+            price:price
+        };
+    }
+
+    updateSummary();
+}
+
+function updateSummary(){
+
+    let text = "";
+
+    for(let item in cart){
+
+        text += item +
+                " x " +
+                cart[item].qty +
+                " = ₹" +
+                (cart[item].qty * cart[item].price)
+                + "\n";
+    }
+
+    document.getElementById("summary").value = text;
+
+    document.getElementById("total").innerHTML =
+        "Total Bill: ₹" + total.toFixed(2);
+}
+
+function checkout(){
+
+    if(total === 0){
+        alert("Please add items first.");
+        return;
+    }
+
+    let bill =
+"========== RESTAURANT BILL ==========\n\n";
+
+    bill +=
+"Date : " +
+new Date().toLocaleString() +
+"\n\n";
+
+    for(let item in cart){
+
+        bill += item +
+                " x " +
+                cart[item].qty +
+                " = ₹" +
+                (cart[item].qty * cart[item].price)
+                + "\n";
+    }
+
+    let gst = total * 0.05;
+    let finalAmount = total + gst;
+
+    bill +=
+"\n----------------------------------";
+
+    bill +=
+"\nSubtotal : ₹" +
+total.toFixed(2);
+
+    bill +=
+"\nGST (5%) : ₹" +
+gst.toFixed(2);
+
+    bill +=
+"\nGrand Total : ₹" +
+finalAmount.toFixed(2);
+
+    bill +=
+"\n----------------------------------";
+
+    bill +=
+"\nThank You For Visiting!";
+
+    alert(bill);
+}
+
+function clearOrder(){
+
+    total = 0;
+    cart = {};
+
+    document.getElementById("summary").value = "";
+
+    document.getElementById("total").innerHTML =
+        "Total Bill: ₹0.00";
+}
+
+</script>
+
+</body>
+</html>
